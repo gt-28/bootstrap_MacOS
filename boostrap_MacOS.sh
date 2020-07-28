@@ -1,10 +1,13 @@
 #!/bin/bash
 
+## Just for the sake of colorful ouput
 BLUE=$(tput setaf 4)
 CYAN=$(tput setaf 6)
 RED=$(tput setaf 1)
 GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
+
+
 # This script lets you configure/Personalize MacOS!
 echo "*******************************"
 echo "* Personalizing $USER's MacOS  *"
