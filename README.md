@@ -1,4 +1,4 @@
-# setMyMac
+# Bootstrap Mac OS
 
 Shell script to bootstrap my MacOS
 
