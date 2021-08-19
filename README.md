@@ -1,6 +1,8 @@
-# Bootstrap Mac OS for more Productive and Customization
+# Bootstrap Mac OS
 
-Shell script to bootstrap MacOS
+This project helps Customizing your Mac the way you want for better productivity!
+
+It's a simple shell script that runs on your mac to help install and configure the OS.
 
 ## Usage
 
