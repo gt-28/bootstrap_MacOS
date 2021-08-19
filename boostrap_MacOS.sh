@@ -1,94 +1,56 @@
 #!/bin/bash
 
 ## Just for the sake of colorful ouput
-BLUE=$(tput setaf 4)
-CYAN=$(tput setaf 6)
-RED=$(tput setaf 1)
-GREEN=$(tput setaf 2)
-YELLOW=$(tput setaf 3)
-
+# Helpers
+function echo_ok() { echo -e '\033[1;32m[✔]'"$1"'\033[0m'; }
+function echo_info() { echo -e '\033[1;34m[INFO:]'"$1"'\033[0m'; }
+function echo_warn() { echo -e '\033[1;33m[WARN:]'"$1"'\033[0m'; }
+function echo_error() { echo -e '\033[1;31m[ERROR:] '"$1"'\033[0m'; }
 
 # This script lets you configure/Personalize MacOS!
-echo "*******************************"
-echo "* Personalizing $USER's MacOS  *"
-echo "*******************************"
+echo_ok "***********************************************************"
+echo_ok "   *    Personalizing $USER's MacOS                *       "
+echo_ok
+echo_ok "   *    Run_time: $(date) @ $(hostname)            *       "
+echo_ok "***********************************************************"
 
-# Install's `homebrew`
-printf "${BLUE} Check for Homebrew & Install if not present \n"
-which -s brew
-if [[ $? != 0 ]] ; then
-    # Install Homebrew
-    printf "${CYAN} Homebrew is not present, Installing Homebrew \n"
-    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# Enter for the administrator password when prompt
+echo_info "This Script requires admin/sudo password for installing few applications/packages"
+sudo -v
+
+# Keep-alive: update existing `sudo` time stamp until `bootstrap` has finished
+while true; do
+    sudo -n true
+    sleep 60
+    kill -0 "$$" || exit
+done 2>/dev/null &
+
+set -e
+
+# Requires xcode!
+echo_info "Ensure Apple's command line tools are installed before running this script"
+
+if type xcode-select >&- && xpath=$(xcode-select --print-path) &&
+    test -d "${xpath}" && test -x "${xpath}"; then
+    echo_ok "Xcode already installed. Skipping."
 else
-    printf "${YELLOW} Homebrew is already installed, Updating to latest version \n"
+    echo_info "Installing Xcode…"
+    xcode-select --install
+    while ! command -v xcode-select >&-; do
+        sleep 60
+    done
+    echo_ok "Xcode installed!"
+fi
+
+# Install Homebrew
+echo_info "Check for Homebrew & Install if not present"
+which -s brew
+if [[ $? != 0 ]]; then
+    echo_warn "Homebrew is not present, Installing Homebrew"
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    echo_ok "Homebrew successfully installed"
+else
+    echo_ok "Homebrew is already installed, Updating to latest version \n"
     brew update
 fi
-printf "${GREEN}\xE2\x9C\x94 Homebrew installed \n"
-
-# Install's require homebrew packages
-breweries=(
-    autoconf
-    automake
-    curl
-    coreutils
-    findutils
-    git
-    htop
-    jq
-    tree
-    vim
-    wget
-) 
-printf "${BLUE}Installing $breweries \n"
-brew install ${breweries[@]}
-printf "${GREEN}\xE2\x9C\x94 Brew packages installed \n"
-
-# Install's homebrew casks
-brewCasks=(
-    iterm
-    itsycal
-    postman
-    signal
-    visual-studio-code
-    open-in-code
-)
-printf "${BLUE}Installing $brewCasks \n"
-brew cask install ${brewCasks[@]}
-printf "${GREEN}\xE2\x9C\x94 BrewCasks installed \n"
-
-# Install Alfred 4
-printf "${CYAN}Installing $brewCasks \n"
-brew cask install alfred
-open -a "Alfred 4"
-printf "${GREEN}\xE2\x9C\x94 Alfred installed, please use 'opt+space' \n"
-
-# Install require browser
-printf "${CYAN} Choose browser to install \n"
-PS3='Please enter your choice: '
-options=("google-chrome" "firefox" "microsoft-edge" "Quit")
-select opt in "${options[@]}"
-do
-    case $opt in
-        "google-chrome")
-            echo "you chose choice 1"
-            printf "${BLUE} Installing Google Chrome \n"
-            brew cask install google-chrome
-            ;;
-        "firefox")
-            echo "you chose choice 2"
-            printf "${BLUE} Installing Mozilla Fireox \n"
-            brew cask install firefox
-            ;;
-        "microsoft-edge")
-            echo "you chose choice 2"
-            printf "${BLUE} Installing Microsoft Edge \n"
-            brew cask install microsoft-edge
-            ;;
-        "Quit")
-            break
-            ;;
-        *) echo "invalid option $REPLY";;
-    esac
-done
 

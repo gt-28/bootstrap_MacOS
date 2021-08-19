@@ -1,6 +1,6 @@
-# Bootstrap Mac OS
+# Bootstrap Mac OS for more Productive and Customization
 
-Shell script to bootstrap my MacOS
+Shell script to bootstrap MacOS
 
 ## Usage
 
@@ -11,4 +11,4 @@ Run the following command:
 
 ## To-Do
 
-A lot needs cleanups and updates.
+A lot needs cleanups and updates. This is just the beginning for this project!

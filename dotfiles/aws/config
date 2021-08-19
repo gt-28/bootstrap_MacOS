@@ -1,0 +1,6 @@
+[profile east]
+region=us-east-2
+
+[profile west]
+region=us-west-1
+output=text
